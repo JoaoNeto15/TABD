@@ -1,0 +1,25 @@
+CREATE EXTENSION postgis;
+\i taxi_satnds;
+
+alter table taxi_stands add proj_location geometry(Point,3763);
+update taxi_stands set proj_location = st_transform(location::geometry,3763);
+create index taxi_stands_location_idx on taxi_stands using GIST(proj_location);
+
+1 - SELECT COUNT(*) FROM taxi_stands;
+2 - select st_astext(location) from taxi_stands where name ilike 'INFANTE';
+3 - SELECT a.name, b.name, st_distance(a.proj_location,b.proj_location) AS dis FROM taxi_stands a, taxi_stands b WHERE a.id<b.id ORDER BY dis LIMIT 1;
+4 - select name from taxi_stands order by ST_Y(location) desc limit 1;
+    N - Amial
+    S - Infante
+    E - Azevedo
+    O - Castelo do Queijo
+5 - select ST_AsText(ST_Envelope(st_collect(proj_location))) from taxi_stands;
+    select ST_Area(ST_Envelope(st_collect(proj_location)))/1000000 from taxi_stands;
+6 - select ST_Area(ST_ConvexHull(st_collect(proj_location)))/1000000 from taxi_stands;
+7 - SELECT a.name, b.name, st_distance(a.proj_location, b.proj_location) AS dis FROM taxi_stands a, taxi_stands b Where a.id<b.id ORDER BY dis desc LIMIT 1;
+8 - SELECT ST_AsText(ST_Centroid(ST_Collect(proj_location))9 from taxi_stands;
+9 - select name, st_distance(proj_location, centroid) from taxi_stands,(select st_centroid(st_collect(proj_location)) centroid from taxi_stands) as t;
+10- select name, st_distance(proj_location, centroid) from taxi_stands,(select st_centroid(st_collect(proj_location)) centroid from taxi_stands) as t where st_distance(proj_location,centroid)<1000;
+
+
+---------------------------tracks-----------------------------
