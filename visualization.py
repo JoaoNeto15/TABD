@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import psycopg2
 
 scale=1/30000
-conn = psycopg2.connect("dbname=tabd user=joaoneves")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 cursor_psql = conn.cursor()
 sql = "select st_astext(proj_location) from taxi_stands"
 cursor_psql.execute(sql)
