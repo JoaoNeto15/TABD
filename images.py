@@ -10,9 +10,9 @@ register(conn)
 cursor_psql = conn.cursor()
 
 
-# city = "Aveiro"
-#lon = -8.653783
-#lat = 40.642147
+city = "Aveiro"
+lon = -8.653783
+lat = 40.642147
 
 city="Porto"
 lon = -8.629179
