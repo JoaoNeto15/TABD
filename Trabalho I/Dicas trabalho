@@ -1,2 +1,8 @@
 - usando as tracks, fazer um mapa como os da cidade mas por concelho
 
+
+SELECT concelho, tracks.id from tracks, cont_aad_caop2018 WHERE state='BUSY' AND 
+    ST_Within(ST_StartPoint(proj_track), proj_boundary);
+
+
+- 
