@@ -13,7 +13,7 @@ from postgis.psycopg import register
 minx = -46843.16270000022
 miny = 163345.06010000035
 
-a = np.zeros((53, 116))
+a = np.ones((53, 116))
 
 conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
 register(conn)
@@ -29,34 +29,13 @@ for result in results:
     x1=int((x-minx)/100)
     a[y1][x1] = a[y1][x1] + 1
 
-""" print(len(xs))
-print(len(ys))
-print(min(xs),max(xs))
-print(max(xs)-min(xs))
-print(min(ys),max(ys))
-print(max(ys)-min(ys)) """
-    
-
-    
-
-
-
+a=np.log2(a)
 
 
 fig = plt.figure(figsize=(12,5.2))
 
-
-
-ax = sns.heatmap(a, vmax=10000)
+ax = sns.heatmap(a)
 ax.invert_yaxis()
-
-"""
-select id, st_astext(initial_point), st_astext(initial_point_proj) from taxi_services order by ST_Y(initial_point) limit 10;
-select count(*) from taxi_services, cont_aad_caop2018 where st_within(initial_point_proj,proj_boundary);
-
-select id, st_astext(initial_point) from taxi_services, cont_aad_caop2018 where st_within(initial_point_proj,proj_boundary)order by ST_Y(initial_point) limit 10;
-"""
-
 
 
 #É ESTAAAAAAA
@@ -75,13 +54,6 @@ for row in results:
         xs.append((x-minx)/100)
         ys.append((y-miny)/100)
     plt.plot(xs,ys,color='white',lw='0.5')
-
-
-""" print("x:")
-print(minx, maxx)
-print("y:")
-print(miny, maxy) """
-
 
 
 plt.show()

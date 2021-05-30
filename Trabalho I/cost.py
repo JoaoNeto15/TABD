@@ -10,7 +10,6 @@ conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
 register(conn)
 cursor_psql = conn.cursor()
 
-
 def convert(seconds):
     seconds = seconds % (24 * 3600)
     hour = seconds // 3600
@@ -19,7 +18,6 @@ def convert(seconds):
     seconds %= 60
       
     return "%d:%02d:%02d" % (hour, minutes, seconds)
-
 
 def cost(id):
     #print("TaxiId: " + str(id))
@@ -82,43 +80,110 @@ def cost(id):
                 total_money+=0.1
                 seconds=0
                 distance-=distance_fare
-    
-    """ print("Custo: " + str(round(total_money,2)) + "€")
-    print("Distancia Query: " + str(round(results[0][2]/1000,2)))
-    print("Distancia: " + str(round(total_distance/1000,2)) + "km")
-    print("Tempo: " + convert(total_time)) """
 
     return total_money
 
-""" cost(1)
-print()
-cost(22)
-print()
-cost(54)
-print()
-cost(434)
-print()
-cost(12974)
-print()
-cost(12985)
-print() """
+def med_cost_concelho(conc):
+    cost_conc=0
+    sql = "SELECT tracks.id from tracks, cont_aad_caop2018 WHERE state='BUSY' AND concelho='" + conc +"' AND ST_Within(ST_StartPoint(proj_track), proj_boundary)"
+    cursor_psql.execute(sql)
 
-def concelho():
-    concelhos = ["PORTO", "VILA NOVA DE GAIA", "MATOSINHOS", "GONDOMAR", "MAIA"]
-    cost_concelhos = [[0,0],[0,0],[0,0],[0,0],[0,0]]
-    for i in range(len(concelhos)):
-        sql = "SELECT tracks.id from tracks, cont_aad_caop2018 WHERE state='BUSY' AND concelho='"+ concelhos[i] +"' AND ST_Within(ST_StartPoint(proj_track), proj_boundary)"
-        cursor_psql.execute(sql)
-        results = cursor_psql.fetchall()
-        print(concelhos[i] + ": " + str(len(results)))
-        cost_concelhos[i][1] = len(results)
-        for j in results:
-            cost_concelhos[i][0] += cost(j[0])
-    print(cost_concelhos)
-    for i in cost_concelhos:
-        print("%.2f/%d=%.2f" % (i[0],i[1], i[0]/i[1]))
+    results = cursor_psql.fetchall()
+
+    for row in results:
+        cost_conc += cost(row[0])
+
+    medium = cost_conc/len(results)
+    
+    #print("Concelho " + conc + " with " + str(len(results)) + " tracks got a medium value of: " + str(medium))
+
+    return medium
         
+def polygon_to_points(polygon):
+    xs, ys = [],[]
+    for (x,y) in polygon.coords:
+        xs.append(x)
+        ys.append(y) 
+    return xs,ys
+
+def print_concelho(conc, grad,num):
+    plt.clf()
+
+    sql ="select st_envelope(st_collect(st_simplify(proj_boundary,100,FALSE))) from cont_aad_caop2018 where concelho='" + conc + "'"
+    cursor_psql.execute(sql)
+    results = cursor_psql.fetchall()
+
+    polygon= results[0][0][0]
+
+    xs,ys = polygon_to_points(polygon)
+
+    proportion = ((max(ys)-min(ys))/(max(xs)-min(xs)))
+
+    width = 7
+    height = width * proportion
+    plt.figure(figsize=(width,height))
+
+    #É ESTAAAAAAA
+    sql = "SELECT st_union(proj_boundary) from cont_aad_caop2018 where concelho='" + conc + "' group by concelho"
+    #print(sql)
+    cursor_psql.execute(sql)
+    results = cursor_psql.fetchall()
+    #print(results[0])
+
+    polygon = results[0][0][0]
+    xs,ys = polygon_to_points(polygon)
+    plt.plot(xs,ys,color='black',lw='0.2')
+    plt.fill(xs,ys,"r", alpha=grad)
+
+    plt.savefig(str(num)+conc+'.png')
 
 
+def select_concelhos():
+    sql = "select concelho, count(tracks.id) from tracks, cont_aad_caop2018 where state='BUSY' and ST_Within(ST_StartPoint(proj_track),proj_boundary) group by concelho order by count(tracks.id) desc limit 13"
+    cursor_psql.execute(sql)
+    results = cursor_psql.fetchall()
+    
+    dict = {}
+    arr = []
 
-concelho()
+    for row in results:
+        med = med_cost_concelho(row[0])
+        print(row[0], round(med_cost_concelho(row[0]),2))
+        arr.append(round(med,2))
+        dict[round(med,2)] = row[0]
+    return dict,arr
+
+
+"""
+MAIA:                120     9.96
+MATOSINHOS:          1014    6.71
+OEIRAS:              758     6.65
+GONDOMAR:            711     5.91
+AVEIRO:              482     5.91
+VILA NOVA DE GAIA:   1870    5.89
+PORTO:               4646    5.77
+LISBOA:              4754    5.69
+ODIVELAS:            1332    5.48
+SINTRA:              2955    5.32
+BRAGA:               1230    4.98
+COIMBRA:             4026    4.93
+LOURES:              425     4.57
+"""
+
+
+dictionary,array = select_concelhos()
+print(dictionary)
+print(array)
+array.sort()
+print(array)
+
+alpha = 1/12
+x=1
+for i in range(len(array)):
+    print_concelho(dictionary[array[i]],x+1)
+    x=x-alpha
+    if x<0:
+        x=0
+
+
+#print_concelho('MAIA')

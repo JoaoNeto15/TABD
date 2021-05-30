@@ -38,10 +38,13 @@ sql = "SELECT concelho,st_union(proj_boundary) from cont_aad_caop2018 where dist
 cursor_psql.execute(sql)
 results = cursor_psql.fetchall()
 #print(results[0])
+col=0
 
 for row in results:
     polygon = row[1][0]
     xs,ys = polygon_to_points(polygon)
     plt.plot(xs,ys,color='black',lw='0.2')
+    plt.fill(xs,ys,"b", alpha=col)
+    col=col+0.055
 
 plt.show()
