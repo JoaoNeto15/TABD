@@ -12,19 +12,19 @@ labels = []
 services = []
 
 for row in results:
-    # print(row[0], " ", row[1])
+    print(row[0], " ", row[1])
     labels.append(row[0])
     services.append(row[1])
 
 
 fig, ax = plt.subplots()
 
-width = 0.35 #width of bars
+width = 0.8 #width of bars
 x = np.arange(5) #label locations
 
-p1 = ax.bar(x,services,width,yerr=0,label='Popularity')
+p1 = ax.bar(x,services,width,yerr=0,color='red')
 
-ax.set_ylabel('Services started within 150m')
+ax.set_ylabel('Services started within 150m of stand')
 ax.set_title('Popularity of Taxi Stands in Porto')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
@@ -32,6 +32,6 @@ ax.legend()
 
 #ax.bar_label(p1,label_type='center')
 
-#fig.tight_layout()
+fig.tight_layout()
 
 plt.show()
