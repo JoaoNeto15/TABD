@@ -106,7 +106,7 @@ def polygon_to_points(polygon):
         ys.append(y) 
     return xs,ys
 
-def print_concelho(conc, grad,num):
+def print_concelho(conc, grad,cost_med,num):
     plt.clf()
 
     sql ="select st_envelope(st_collect(st_simplify(proj_boundary,100,FALSE))) from cont_aad_caop2018 where concelho='" + conc + "'"
@@ -120,8 +120,8 @@ def print_concelho(conc, grad,num):
     proportion = ((max(ys)-min(ys))/(max(xs)-min(xs)))
 
     width = 7
-    height = width * proportion
-    plt.figure(figsize=(width,height))
+    height = (width * proportion) + 1
+    fig, ax = plt.subplots(figsize=(width,height))
 
     #É ESTAAAAAAA
     sql = "SELECT st_union(proj_boundary) from cont_aad_caop2018 where concelho='" + conc + "' group by concelho"
@@ -132,6 +132,9 @@ def print_concelho(conc, grad,num):
 
     polygon = results[0][0][0]
     xs,ys = polygon_to_points(polygon)
+    plt.title(conc + '\n' + 'Average prince: ' + str(round(cost_med,2)) + '€', fontsize='large')
+    ax.set_axis_off()
+    fig.add_axes(ax)
     plt.plot(xs,ys,color='black',lw='0.2')
     plt.fill(xs,ys,"r", alpha=grad)
 
@@ -149,7 +152,7 @@ def select_concelhos():
     for row in results:
         med = med_cost_concelho(row[0])
         print(row[0], round(med_cost_concelho(row[0]),2))
-        arr.append(round(med,2))
+        arr.append(round(med,3))
         dict[round(med,2)] = row[0]
     return dict,arr
 
@@ -172,18 +175,15 @@ LOURES:              425     4.57
 
 
 dictionary,array = select_concelhos()
-print(dictionary)
-print(array)
 array.sort()
-print(array)
 
 alpha = 1/12
-x=1
+x=0
 for i in range(len(array)):
-    print_concelho(dictionary[array[i]],x+1)
-    x=x-alpha
-    if x<0:
-        x=0
+    print_concelho(dictionary[array[i]],x,array[i],i+1)
+    x=x+alpha
+    if x>1:
+        x=1
 
 
 #print_concelho('MAIA')

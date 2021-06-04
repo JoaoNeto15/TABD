@@ -19,7 +19,7 @@ conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
 register(conn)
 cursor_psql = conn.cursor()
 
-sql ="select final_point_proj from taxi_services, cont_aad_caop2018 where st_within(final_point_proj,proj_boundary) and concelho='PORTO'"
+sql ="select initial_point_proj from taxi_services, cont_aad_caop2018 where st_within(initial_point_proj,proj_boundary) and concelho='PORTO'"
 cursor_psql.execute(sql)
 results = cursor_psql.fetchall()
 
@@ -29,12 +29,15 @@ for result in results:
     x1=int((x-minx)/100)
     a[y1][x1] = a[y1][x1] + 1
 
-a=np.log2(a)
+a=np.log10(a)
+
 
 
 fig = plt.figure(figsize=(12,5.2))
 
 ax = sns.heatmap(a)
+ax.set_axis_off()
+fig.add_axes(ax)
 ax.invert_yaxis()
 
 
@@ -55,6 +58,5 @@ for row in results:
         ys.append((y-miny)/100)
     plt.plot(xs,ys,color='white',lw='0.5')
 
-
-plt.show()
+plt.savefig('initial_heatmap.png')
 conn.close()
