@@ -15,7 +15,8 @@ miny = 163345.06010000035
 
 a = np.ones((53, 116))
 
-conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+#conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 register(conn)
 cursor_psql = conn.cursor()
 

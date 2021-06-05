@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import psycopg2
 
-conn = psycopg2.connect("dbname=TABD user=tiago")
+#conn = psycopg2.connect("dbname=TABD user=tiago")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 cursor_psql = conn.cursor()
 sql = "select  name, count(initial_point_proj) from taxi_stands, taxi_services where st_distance(proj_location,initial_point_proj) < 150 GROUP BY 1 ORDER BY 2 DESC LIMIT 5;"
 cursor_psql.execute(sql)

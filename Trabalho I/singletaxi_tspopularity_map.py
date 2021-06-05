@@ -12,7 +12,8 @@ def polygon_to_points(polygon_string):
     return xs,ys
 
 scale=1/30000
-conn = psycopg2.connect("dbname=TABD user=tiago")
+#conn = psycopg2.connect("dbname=TABD user=tiago")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 cursor_psql = conn.cursor()
 sql = "select  st_astext(proj_location), count(initial_point_proj) from taxi_stands, taxi_services where taxi_id = 7 AND st_distance(proj_location,initial_point_proj) < 150 GROUP BY 1 ORDER BY 2;"
 cursor_psql.execute(sql)

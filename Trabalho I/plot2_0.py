@@ -16,7 +16,8 @@ def polygon_to_points(polygon):
     return xs,ys
 
 scale=1/30000
-conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+#conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 register(conn)
 cursor_psql = conn.cursor()
 

@@ -14,7 +14,8 @@ def animate(i):
     scat.set_offsets(offsets[i])
 
 ts_i = 1570665600
-conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+#conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 register(conn)
 cursor_psql = conn.cursor()
 
