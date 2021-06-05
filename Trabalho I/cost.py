@@ -153,8 +153,8 @@ def select_concelhos():
     for row in results:
         med = med_cost_concelho(row[0])
         print(row[0], round(med_cost_concelho(row[0]),2))
-        arr.append(round(med,3))
-        dict[round(med,2)] = row[0]
+        arr.append(round(med,4))
+        dict[round(med,4)] = row[0]
     return dict,arr
 
 
