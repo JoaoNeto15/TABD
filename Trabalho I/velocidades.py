@@ -5,7 +5,8 @@ import math
 from postgis import Polygon, MultiPolygon, LineString
 from postgis.psycopg import register
 
-conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+#conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 register(conn)
 cursor_psql = conn.cursor()
 

@@ -8,7 +8,8 @@ from postgis import Polygon,MultiPolygon
 from postgis.psycopg import register
 import logging
 
-conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+#conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 register(conn)
 cursor_psql = conn.cursor()
 

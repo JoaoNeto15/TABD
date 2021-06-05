@@ -3,7 +3,8 @@ import numpy as np
 import psycopg2
 from collections import defaultdict
 
-conn = psycopg2.connect("dbname=TABD user=tiago")
+#conn = psycopg2.connect("dbname=TABD user=tiago")
+conn = psycopg2.connect("dbname=taxi_services user=joao")
 cursor_psql = conn.cursor()
 
 sql = "select distinct name from taxi_stands"
