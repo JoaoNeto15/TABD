@@ -15,12 +15,11 @@ miny = 163345.06010000035
 
 a = np.ones((53, 116))
 
-#conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
-conn = psycopg2.connect("dbname=taxi_services user=joao")
+conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
 register(conn)
 cursor_psql = conn.cursor()
 
-sql ="select initial_point_proj from taxi_services, cont_aad_caop2018 where st_within(initial_point_proj,proj_boundary) and concelho='PORTO'"
+sql ="select final_point_proj from taxi_services, cont_aad_caop2018 where st_within(final_point_proj,proj_boundary) and concelho='PORTO'"
 cursor_psql.execute(sql)
 results = cursor_psql.fetchall()
 
@@ -59,5 +58,5 @@ for row in results:
         ys.append((y-miny)/100)
     plt.plot(xs,ys,color='white',lw='0.5')
 
-plt.savefig('initial_heatmap.png')
+plt.savefig('heatmap_final.png')
 conn.close()

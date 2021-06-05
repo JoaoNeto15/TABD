@@ -58,5 +58,5 @@ for row in results:
         ys.append((y-miny)/100)
     plt.plot(xs,ys,color='white',lw='0.5')
 
-plt.savefig('initial_heatmap.png')
+plt.savefig('heatmap_initial.png')
 conn.close()

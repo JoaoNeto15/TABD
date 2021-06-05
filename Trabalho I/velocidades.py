@@ -5,8 +5,8 @@ import math
 from postgis import Polygon, MultiPolygon, LineString
 from postgis.psycopg import register
 
-#conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
-conn = psycopg2.connect("dbname=taxi_services user=joao")
+conn = psycopg2.connect("dbname=joaoneves user=joaoneves")
+#conn = psycopg2.connect("dbname=taxi_services user=joao")
 register(conn)
 cursor_psql = conn.cursor()
 
@@ -78,20 +78,16 @@ for track in results:
         med_dist = distance/len(xy)
         med_dist_array.append(med_dist)
         if med_dist < 5:
-            col='green'
-        elif med_dist < 8:
-            col='yellow'
-        elif med_dist < 11.5:
-            col='orange'
-        else:
             col='red'
+        elif med_dist < 7:
+            col='orange'
+        elif med_dist < 10.5:
+            col='yellow'
+        else:
+            col='green'
         ax.plot(xxx,yyy,linewidth=0.1,color=col)
 
 med_dist_array.sort()
-print(int(len(med_dist_array)/4), med_dist_array[int(len(med_dist_array)/4)])
-print(int((len(med_dist_array)/4)*2), med_dist_array[int((len(med_dist_array)/4)*2)])
-print(int((len(med_dist_array)/4)*3), med_dist_array[int((len(med_dist_array)/4)*3)])
-print(len(med_dist_array)-1, med_dist_array[len(med_dist_array)-1])
 
 
 
@@ -100,4 +96,4 @@ plt.text(center_lon, ys_min + 250, 'Imagem gerada com os trajectos do dia 10 de 
 
 
 
-plt.savefig(city+'.png')
+plt.savefig('velocidades2.png')
