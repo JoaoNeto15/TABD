@@ -32,3 +32,13 @@ Lista de Querys:
 
 ->Plot das praças preferidas dos taxistas. Tiago
 
+1º HeatMap de Início e Fim de taxi_services;
+2º Animação de táxis em movimento;
+3º Plot dos concelhos com cor, por média de preço de viagem
+4º 
+
+5º Definição de Imagens em relação a quantidade de pontos do distrito;
+
+6º Popularidade dos pontos de táxi entre os taxistas;
+7º Os pontos de táxi mais usados de de cada táxi a 150m do ponto.
+8º Popularidade dos taxis_stands a distância de 150 metros do stand.
