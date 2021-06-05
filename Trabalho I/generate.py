@@ -107,5 +107,7 @@ anim = FuncAnimation(
 """ writervideo = animation.PillowWriter(fps=30)
 anim.save('rgenerate.gif',writer=writervideo) """
 
-plt.draw()
-plt.show()
+""" plt.draw()
+plt.show() """
+
+anim.save("rotas.mp4")
