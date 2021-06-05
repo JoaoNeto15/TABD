@@ -44,8 +44,8 @@ taxis_x ={}
 taxis_y ={}
 
 ts_i = 1570665600
-ts_f = 1570668999
-#ts_f = 1570751999
+#ts_f = 1570668999
+ts_f = 1570751999
 
 array_size = int(24*60*60/step)
 for row in results:

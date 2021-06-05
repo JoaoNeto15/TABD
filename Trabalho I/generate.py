@@ -19,40 +19,7 @@ register(conn)
 cursor_psql = conn.cursor()
 
 
-"""scale=1/3000000 
-xs_min, xs_max, ys_min, ys_max = -120000, 165000, -310000, 285000
-width_in_inches = (xs_max-xs_min)/0.0254*1.1
-height_in_inches = (ys_max-ys_min)/0.0254*1.1
-
-fig, ax = plt.subplots(figsize=(width_in_inches*scale, height_in_inches*scale))
-ax.axis('off')
-ax.set(xlim=(xs_min, xs_max), ylim=(ys_min, ys_max))
-
-sql = "select distrito,st_union(proj_boundary) from cont_aad_caop2018 group by distrito"
-cursor_psql.execute(sql)
-results = cursor_psql.fetchall()
-
-xs , ys = [],[]
-
-for row in results:
-    geom = row[1]
-    if type(geom) is MultiPolygon:
-        for pol in geom:
-            xys = pol[0].coords
-            xs, ys = [],[]
-            for (x,y) in xys:
-                xs.append(x)
-                ys.append(y)
-            ax.plot(xs,ys,color='black',lw='0.2')
-    if type(geom) is Polygon:
-        xys = geom[0].coords
-        xs, ys = [],[]
-        for (x,y) in xys:
-            xs.append(x)
-            ys.append(y)
-        ax.plot(xs,ys,color='black',lw='0.2')
-"""
-scale=1/35000
+scale=1/50000
 zoomx = 7500
 zoomy = 4000
 city="Porto"
@@ -74,7 +41,7 @@ ys_max = center_lat + zoomy
 width_in_inches = (xs_max-xs_min)/0.0254
 height_in_inches = (ys_max-ys_min)/0.0254
 
-print(width_in_inches*scale, height_in_inches*scale)
+#print(width_in_inches*scale, height_in_inches*scale)
 
 fig, ax = plt.subplots(figsize=(width_in_inches*scale, height_in_inches*scale),dpi=150)
 ax.axis('off')
@@ -111,9 +78,10 @@ for row in results:
     polygon = row[1][0]
     xs,ys = polygon_to_points(polygon)
     plt.plot(xs,ys,color='black',lw='0.3')
+    plt.fill(xs,ys,"grey", alpha=0.2)
 
 offsets = []
-with open('offsets3.csv', 'r') as csvFile:
+with open('offsets1.csv', 'r') as csvFile:
     reader = csv.reader(csvFile)
     i=0
     for row in reader:
@@ -125,14 +93,14 @@ with open('offsets3.csv', 'r') as csvFile:
             l.append([x,y])
         offsets.append(l)
 
-print("len_ofssets", len(offsets))
+#print("len_ofssets", len(offsets))
 
 x,y = [],[]
 for i in offsets[0]:
     x.append(i[0])
     y.append(i[1])
 
-scat = ax.scatter(x,y,s=2,color='orange')
+scat = ax.scatter(x,y,s=4,color='red')
 anim = FuncAnimation(
     fig, animate, interval=10, frames=len(offsets)-1, repeat = False)
 
